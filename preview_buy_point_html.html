@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   XENON STORE — Order Preview
+  </title>
+  <link href="assets/css/css2" rel="stylesheet"/>
+  <style>
+   :root {
+      --bg: #0f0f13;
+      --surface: #18181f;
+      --surface2: #1e1e27;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f0f5;
+      --muted: #7a7a90;
+      --accent: #7c5cfc;
+      --accent2: #a78bfa;
+      --success: #22d3a5;
+      --error: #f43f5e;
+    }
+    [data-theme="light"] {
+      --bg: #f0f0f6;
+      --surface: #ffffff;
+      --surface2: #f0f0f5;
+      --border: rgba(0,0,0,0.08);
+      --text: #1a1a2e;
+      --muted: #888899;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px 60px;
+    }
+    .page-wrap { width: 100%; max-width: 480px; }
+
+    /* Top nav */
+    .top-nav {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .back-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text); text-decoration: none;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: var(--surface2); }
+    .nav-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+
+    /* Receipt card */
+    .receipt-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .receipt-header {
+      background: linear-gradient(135deg, #007DFF 0%, #0057b8 100%);
+      padding: 28px 24px 24px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .receipt-header::before {
+      content:''; position:absolute; top:-40px; right:-40px;
+      width:120px; height:120px; border-radius:50%;
+      background:rgba(255,255,255,0.07);
+    }
+    .receipt-header::after {
+      content:''; position:absolute; bottom:-30px; left:-20px;
+      width:90px; height:90px; border-radius:50%;
+      background:rgba(255,255,255,0.05);
+    }
+    .gcash-pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 4px 14px;
+      font-weight: 900; font-size: 15px; color:#fff;
+      letter-spacing: 0.5px; margin-bottom: 14px;
+    }
+    .status-icon {
+      width:56px; height:56px;
+      background:rgba(255,255,255,0.15);
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      margin: 0 auto 12px;
+    }
+    .hdr-amount-lbl { color:rgba(255,255,255,0.75); font-size:13px; margin-bottom:4px; }
+    .hdr-amount {
+      font-family:'Syne',sans-serif;
+      font-size:42px; font-weight:800; color:#fff; line-height:1;
+    }
+    .hdr-pts { color:rgba(255,255,255,0.75); font-size:14px; margin-top:6px; }
+
+
+    .tear {
+      height:18px; background:var(--surface);
+      position:relative; margin-top:-1px;
+    }
+    .tear::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:18px;
+      background:linear-gradient(135deg, #007DFF 0%, #0057b8 100%);
+      clip-path: polygon(
+        0% 0%,2.5% 100%,5% 0%,7.5% 100%,10% 0%,12.5% 100%,
+        15% 0%,17.5% 100%,20% 0%,22.5% 100%,25% 0%,27.5% 100%,
+        30% 0%,32.5% 100%,35% 0%,37.5% 100%,40% 0%,42.5% 100%,
+        45% 0%,47.5% 100%,50% 0%,52.5% 100%,55% 0%,57.5% 100%,
+        60% 0%,62.5% 100%,65% 0%,67.5% 100%,70% 0%,72.5% 100%,
+        75% 0%,77.5% 100%,80% 0%,82.5% 100%,85% 0%,87.5% 100%,
+        90% 0%,92.5% 100%,95% 0%,97.5% 100%,100% 0%
+      );
+    }
+
+    .dashed { border:none; border-top:2px dashed var(--border); margin:0 24px; }
+
+  
+    .receipt-body { padding:18px 24px; }
+    .r-row {
+      display:flex; justify-content:space-between; align-items:flex-start;
+      padding:10px 0; font-size:14px;
+      border-bottom:1px solid var(--border);
+    }
+    .r-row:last-child { border-bottom:none; }
+    .r-lbl { color:var(--muted); flex-shrink:0; padding-right:12px; }
+    .r-val { font-weight:600; text-align:right; }
+
+    .badge-pending {
+      display:inline-flex; align-items:center; gap:5px;
+      background:rgba(251,191,36,0.12);
+      border:1px solid rgba(251,191,36,0.3);
+      color:#fbbf24;
+      border-radius:20px; padding:4px 12px;
+      font-size:12px; font-weight:600;
+    }
+    .ref-strip {
+      background:var(--surface2); border-radius:12px;
+      padding:12px 16px; margin:6px 0 2px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .ref-num {
+      font-family:'Syne',sans-serif; font-size:15px; font-weight:700;
+      letter-spacing:1px; color:var(--accent2);
+    }
+    .copy-btn {
+      background:none; border:1px solid var(--border);
+      border-radius:6px; padding:4px 10px;
+      color:var(--muted); font-size:12px; cursor:pointer;
+      transition:all 0.2s;
+    }
+    .copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* Proof section */
+    .proof-section { padding:14px 24px 18px; }
+    .section-micro {
+      font-size:11px; color:var(--muted); font-weight:600;
+      letter-spacing:0.07em; text-transform:uppercase; margin-bottom:8px;
+    }
+    #proofThumb {
+      width:100%; max-height:200px; object-fit:cover;
+      border-radius:12px; border:1px solid var(--border);
+      display:none;
+    }
+
+
+    .action-row { display:flex; gap:10px; padding:0 24px 24px; }
+    .btn-dl {
+      flex:1;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      padding:14px;
+      background:var(--surface2); border:1px solid var(--border);
+      border-radius:12px; color:var(--text);
+      font-family:'Syne',sans-serif; font-size:14px; font-weight:600;
+      cursor:pointer; transition:all 0.2s; text-decoration:none;
+    }
+    .btn-dl:hover { border-color:var(--accent); color:var(--accent); }
+    .btn-continue {
+      flex:1.7;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      padding:14px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      border:none; border-radius:12px; color:#fff;
+      font-family:'Syne',sans-serif; font-size:14px; font-weight:700;
+      cursor:pointer; transition:all 0.2s; text-decoration:none;
+    }
+    .btn-continue:hover {
+      transform:translateY(-2px);
+      box-shadow:0 8px 28px rgba(124,92,252,0.35);
+    }
+
+  
+    .notice {
+      background:rgba(34,211,165,0.07);
+      border:1px solid rgba(34,211,165,0.2);
+      border-radius:14px; padding:14px 16px;
+      display:flex; gap:10px; align-items:flex-start;
+      font-size:13px; color:var(--success);
+      animation:slideUp 0.4s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .notice svg { flex-shrink:0; margin-top:1px; }
+  </style>
+ </head>
+ <body>
+  <div class="page-wrap">
+   <div class="top-nav">
+    <a class="back-btn" href="./buy_point.html">
+     <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+      <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+     </svg>
+    </a>
+    <span class="nav-title">
+     Order Preview
+    </span>
+   </div>
+   <!-- Receipt -->
+   <div class="receipt-card" id="receiptCard">
+    <div class="receipt-header">
+     <div class="gcash-pill">
+      GCash
+     </div>
+     <div class="status-icon">
+      <svg fill="none" height="28" stroke="white" stroke-width="2.5" viewbox="0 0 24 24" width="28">
+       <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </div>
+     <div class="hdr-amount-lbl">
+      Amount to Pay
+     </div>
+     <div class="hdr-amount" id="previewAmount">
+      ₱—
+     </div>
+     <div class="hdr-pts" id="previewPts">
+      — points
+     </div>
+    </div>
+    <div class="tear">
+    </div>
+    <div class="receipt-body">
+     <div class="r-row">
+      <span class="r-lbl">
+       Status
+      </span>
+      <span class="r-val">
+       <span class="badge-pending">
+        <svg fill="currentColor" height="8" viewbox="0 0 8 8" width="8">
+         <circle cx="4" cy="4" r="4">
+         </circle>
+        </svg>
+        Pending Review
+       </span>
+      </span>
+     </div>
+     <div class="r-row" style="flex-direction:column;align-items:flex-start;gap:0">
+      <span class="r-lbl">
+       Reference No.
+      </span>
+      <div class="ref-strip" style="width:100%">
+       <span class="ref-num" id="refNum">
+        —
+       </span>
+       <button class="copy-btn" onclick="copyRef()">
+        Copy
+       </button>
+      </div>
+     </div>
+     <div class="r-row">
+      <span class="r-lbl">
+       Account
+      </span>
+      <span class="r-val" id="previewEmail">
+       —
+      </span>
+     </div>
+     <div class="r-row">
+      <span class="r-lbl">
+       Payment Method
+      </span>
+      <span class="r-val">
+       GCash QR
+      </span>
+     </div>
+     <div class="r-row">
+      <span class="r-lbl">
+       Rate
+      </span>
+      <span class="r-val">
+       ₱1 = 1 Point
+      </span>
+     </div>
+     <div class="r-row" style="border-bottom:none">
+      <span class="r-lbl">
+       Date &amp; Time
+      </span>
+      <span class="r-val" id="previewDate">
+       —
+      </span>
+     </div>
+    </div>
+    <hr class="dashed"/>
+    <div class="proof-section">
+     <div class="section-micro">
+      Proof of Payment
+     </div>
+     <img alt="Proof" id="proofThumb" src=""/>
+     <div id="noProof" style="font-size:13px;color:var(--muted)">
+      No proof uploaded
+     </div>
+    </div>
+    <div class="action-row">
+     <button class="btn-dl" onclick="downloadReceipt()">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+       <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      Download
+     </button>
+     <a class="btn-continue" href="./success_buy_point.html">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      Continue
+     </a>
+    </div>
+   </div>
+   <div class="notice">
+    <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+     <circle cx="12" cy="12" r="10">
+     </circle>
+     <path d="M12 16v-4M12 8h.01">
+     </path>
+    </svg>
+    <div>
+     Your request is
+     <strong>
+      under review
+     </strong>
+     . Points will be credited once an admin approves your payment. This usually takes a few minutes.
+    </div>
+   </div>
+  </div>
+  <script>
+   const theme = localStorage.getItem('theme') || 'dark';
+if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+
+function pad(n) {
+    return String(n).padStart(2, '0');
+}
+
+function genRef() {
+    return 'ENZ-' + Date.now().toString(36).toUpperCase().slice(-5) + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
+const stored = (() => {
+    try {
+        return JSON.parse(sessionStorage.getItem('XenonOrder') || localStorage.getItem('XenonOrder') || 'null');
+    } catch (e) {
+        return null;
+    }
+})();
+
+const order = stored || {
+    amount: 200,
+    points: 200,
+    email: 'demo@example.com',
+    createdAt: Date.now()
+};
+if (!order.ref) order.ref = genRef();
+
+document.getElementById('previewAmount').textContent = '₱' + Number(order.amount).toLocaleString();
+document.getElementById('previewPts').textContent = Number(order.points).toLocaleString() + ' points';
+document.getElementById('previewEmail').textContent = order.email || '—';
+document.getElementById('refNum').textContent = order.ref;
+
+const d = new Date(order.createdAt || Date.now());
+document.getElementById('previewDate').textContent =
+    `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+if (order.proofBase64) {
+    const img = document.getElementById('proofThumb');
+    img.src = order.proofBase64;
+    img.style.display = 'block';
+    document.getElementById('noProof').style.display = 'none';
+}
+
+
+try {
+    sessionStorage.setItem('XenonOrder', JSON.stringify(order));
+    localStorage.setItem('XenonOrder', JSON.stringify(order));
+} catch (e) {}
+
+function copyRef() {
+    navigator.clipboard.writeText(order.ref).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        btn.style.cssText += 'color:var(--success);border-color:var(--success)';
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+        }, 2000);
+    });
+}
+
+function downloadReceipt() {
+    const proofHtml = order.proofBase64 ?
+        `<img src="${order.proofBase64}" style="max-width:300px;border-radius:12px;margin-top:8px;">` :
+        '<p style="color:#7a7a90;font-size:13px">No proof image</p>';
+
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>XENON Receipt ${order.ref}</title>
+<style>
+  body{font-family:'Segoe UI',sans-serif;background:#0f0f13;color:#f0f0f5;display:flex;justify-content:center;padding:40px 16px;margin:0}
+  .card{background:#18181f;border-radius:24px;max-width:420px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+  .hdr{background:linear-gradient(135deg,#007DFF,#0057b8);padding:30px 24px;text-align:center}
+  .pill{display:inline-block;background:rgba(255,255,255,.2);border-radius:8px;padding:4px 14px;font-weight:900;color:#fff;font-size:15px;margin-bottom:14px}
+  .amt{font-size:44px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px}
+  .pts{color:rgba(255,255,255,.75);font-size:14px}
+  .body{padding:18px 24px}
+  .row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14px}
+  .row:last-child{border-bottom:none}
+  .row span:first-child{color:#7a7a90}
+  .row span:last-child{font-weight:600}
+  .badge{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:#fbbf24;border-radius:20px;padding:4px 12px;font-size:12px}
+  .ref{background:#1e1e27;border-radius:12px;padding:12px 16px;font-size:17px;font-weight:700;color:#a78bfa;text-align:center;letter-spacing:1.5px;margin:8px 0 2px}
+  .proof{padding:14px 24px 24px;text-align:center}
+  .micro{font-size:11px;color:#7a7a90;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+  .tear-line{border:none;border-top:2px dashed rgba(255,255,255,.08);margin:0 24px}
+  @media print{body{background:#fff;color:#111}.card{box-shadow:none;border:1px solid #ddd}.hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body>
+<div class="card">
+  <div class="hdr">
+    <div class="pill">GCash</div>
+    <div class="amt">₱${Number(order.amount).toLocaleString()}</div>
+    <div class="pts">${Number(order.points).toLocaleString()} points</div>
+  </div>
+  <div class="body">
+    <div class="row"><span>Status</span><span><span class="badge">⏳ Pending Review</span></span></div>
+    <div style="padding:8px 0;font-size:12px;color:#7a7a90;text-transform:uppercase;letter-spacing:.07em">Reference No.</div>
+    <div class="ref">${order.ref}</div>
+    <div class="row"><span>Account</span><span>${order.email||'—'}</span></div>
+    <div class="row"><span>Payment Method</span><span>GCash QR</span></div>
+    <div class="row"><span>Rate</span><span>₱1 = 1 Point</span></div>
+    <div class="row"><span>Date</span><span>${document.getElementById('previewDate').textContent}</span></div>
+  </div>
+  <hr class="tear-line">
+  <div class="proof"><div class="micro">Proof of Payment</div>${proofHtml}</div>
+</div>
+</body></html>`;
+
+    const blob = new Blob([html], {
+        type: 'text/html'
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `XENON-Receipt-${order.ref}.html`;
+    a.click();
+}
+  </script>
+ </body>
+</html>

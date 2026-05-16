@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   XENON STORE — Account
+  </title>
+  <link href="assets/css/css2" rel="stylesheet"/>
+  <link href="assets/css/shared.css" rel="stylesheet"/>
+  <style>
+   .account-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    
+    .avatar-large {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      position: relative;
+    }
+    
+    .avatar-large input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .account-info h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    
+    .account-info .email {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .account-info .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124, 92, 252, 0.12);
+      border: 1px solid rgba(124, 92, 252, 0.25);
+      color: var(--accent2);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    
+    .account-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 640px) {
+      .account-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .account-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+    }
+    
+    .account-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .account-card-title svg {
+      color: var(--accent);
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    .form-group input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .form-group input:focus {
+      border-color: var(--accent);
+    }
+    
+    .form-group input::placeholder {
+      color: var(--muted);
+    }
+    
+    .form-group input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .stat-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card-mini {
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .stat-card-mini .val {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card-mini .label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+    
+    .btn-save {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(124, 92, 252, 0.4);
+    }
+    
+    .btn-save:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .danger-zone {
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+    
+    .danger-zone .account-card-title {
+      color: var(--error);
+    }
+    
+    .btn-delete {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--error);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-delete:hover {
+      background: rgba(244, 63, 94, 0.1);
+    }
+    
+    .alert-box {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    
+    .alert-box.error {
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: var(--error);
+    }
+    
+    .alert-box.success {
+      background: rgba(34, 211, 165, 0.1);
+      border: 1px solid rgba(34, 211, 165, 0.3);
+      color: var(--success);
+    }
+    
+    .alert-box.show {
+      display: block;
+    }
+    
+    .joined-date {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+    
+    .edit-toggle {
+      margin-left: auto;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .edit-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 20px;
+    }
+    
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 32px 28px 28px;
+      max-width: 420px;
+      width: 100%;
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.45);
+    }
+    
+    .modal-overlay.show .modal-box {
+      transform: translateY(0) scale(1);
+    }
+    
+    /* Step indicator */
+    .modal-steps {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    
+    .modal-step-dot {
+      height: 4px;
+      border-radius: 4px;
+      background: var(--border);
+      flex: 1;
+      transition: background 0.3s;
+    }
+    
+    .modal-step-dot.active {
+      background: var(--error);
+    }
+    
+    .modal-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    
+    .modal-icon svg {
+      color: var(--error);
+    }
+    
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    
+    .modal-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    /* Confirmation input */
+    .modal-confirm-field {
+      margin-bottom: 20px;
+    }
+    
+    .modal-confirm-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    
+    .modal-confirm-field input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    
+    .modal-confirm-field input:focus {
+      border-color: var(--error);
+    }
+    
+    .modal-confirm-field .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    
+    .modal-confirm-field .hint code {
+      font-family: monospace;
+      background: var(--surface2);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--error);
+    }
+    
+    .modal-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .modal-check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    
+    .modal-check-item svg {
+      flex-shrink: 0;
+      color: var(--error);
+      opacity: 0.7;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .modal-btn-cancel {
+      flex: 1;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .modal-btn-cancel:hover {
+      border-color: var(--muted);
+    }
+    
+    .modal-btn-danger {
+      flex: 1;
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    
+    .modal-btn-danger:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(244, 63, 94, 0.4);
+    }
+    
+    .modal-btn-danger:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .modal-btn-next {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    
+    .modal-btn-next:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .btn-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+    
+    .modal-btn-danger.loading .btn-spinner {
+      display: block;
+    }
+    
+    .modal-btn-danger.loading .btn-label {
+      display: none;
+    }
+    
+  
+    .pw-strength-bar {
+      height: 4px;
+      border-radius: 4px;
+      background: var(--border);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    
+    .pw-strength-fill {
+      height: 100%;
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.3s, background 0.3s;
+    }
+    
+    .pw-strength-label {
+      font-size: 11px;
+      margin-top: 4px;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+  </style>
+ </head>
+ <body>
+  <div class="main-content">
+   <div class="page-container">
+    <div class="account-header">
+     <div class="avatar-large" id="avatarLarge">
+      U
+      <input accept="image/*" onchange="changeAvatar(event)" type="file"/>
+     </div>
+     <div class="account-info">
+      <h1 id="displayName">
+       User
+      </h1>
+      <div class="email" id="userEmail">
+       user@example.com
+      </div>
+      <div class="role-badge" id="roleBadge">
+       <svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12">
+        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       <span id="roleText">
+        Buyer
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="account-grid">
+     <!-- Profile Card -->
+     <div class="account-card">
+      <div class="account-card-title">
+       <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Profile Information
+      </div>
+      <div class="alert-box" id="profileAlert">
+      </div>
+      <div class="form-group">
+       <label>
+        Display Name
+       </label>
+       <input disabled="" id="nameInput" placeholder="Your display name" type="text"/>
+      </div>
+      <div class="form-group">
+       <label>
+        Email Address
+       </label>
+       <input disabled="" id="emailInput" placeholder="your@email.com" type="email"/>
+      </div>
+      <div class="form-group">
+       <label>
+        UID
+       </label>
+       <input disabled="" id="uidInput" placeholder="—" type="text"/>
+      </div>
+      <button class="edit-toggle" id="editToggleBtn" onclick="toggleEdit()">
+       Enable Edit
+      </button>
+      <button class="btn-save" disabled="" id="saveProfileBtn" onclick="saveProfile()" style="margin-top:12px">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Save Changes
+      </button>
+     </div>
+     <!-- Stats Card -->
+     <div class="account-card">
+      <div class="account-card-title">
+       <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Activity Stats
+      </div>
+      <div class="stat-cards">
+       <div class="stat-card-mini">
+        <div class="val" id="statOrders">
+         0
+        </div>
+        <div class="label">
+         Orders
+        </div>
+       </div>
+       <div class="stat-card-mini">
+        <div class="val" id="statPoints">
+         0
+        </div>
+        <div class="label">
+         Total Points
+        </div>
+       </div>
+       <div class="stat-card-mini">
+        <div class="val" id="statSpent">
+         0
+        </div>
+        <div class="label">
+         Points Spent
+        </div>
+       </div>
+       <div class="stat-card-mini">
+        <div class="val" id="statPurchased">
+         0
+        </div>
+        <div class="label">
+         Purchased
+        </div>
+       </div>
+      </div>
+      <div class="joined-date">
+       <svg fill="none" height="12" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px" viewbox="0 0 24 24" width="12">
+        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Joined:
+       <span id="joinedDate">
+        —
+       </span>
+      </div>
+     </div>
+     <!--  Card -->
+     <div class="account-card">
+      <div class="account-card-title">
+       <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Security
+      </div>
+      <div class="alert-box" id="securityAlert">
+      </div>
+      <div class="form-group">
+       <label>
+        New Password
+       </label>
+       <input disabled="" id="newPwInput" oninput="updatePwStrength()" placeholder="Leave blank to keep current" type="password"/>
+       <div class="pw-strength-bar">
+        <div class="pw-strength-fill" id="pwStrengthFill">
+        </div>
+       </div>
+       <div class="pw-strength-label" id="pwStrengthLabel" style="color:var(--muted)">
+       </div>
+      </div>
+      <div class="form-group">
+       <label>
+        Confirm Password
+       </label>
+       <input disabled="" id="confirmPwInput" placeholder="Repeat new password" type="password"/>
+      </div>
+      <button class="edit-toggle" id="securityEditBtn" onclick="toggleSecurityEdit()">
+       Enable Edit
+      </button>
+      <button class="btn-save" disabled="" id="saveSecurityBtn" onclick="saveSecurity()" style="margin-top:12px">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Update Password
+      </button>
+     </div>
+     <!-- Danger Zone -->
+     <div class="account-card danger-zone">
+      <div class="account-card-title">
+       <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Danger Zone
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
+       Once you delete your account, there is no going back. All your data will be permanently removed.
+      </p>
+      <button class="btn-delete" onclick="deleteAccount()">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       Delete My Account
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- ── DELETE ACCOUNT MODAL ── -->
+  <div aria-labelledby="deleteModalTitle" aria-modal="true" class="modal-overlay" id="deleteModal" role="dialog">
+   <!-- Warning -->
+   <div class="modal-box" id="modalStep1">
+    <div class="modal-steps">
+     <div class="modal-step-dot active">
+     </div>
+     <div class="modal-step-dot">
+     </div>
+    </div>
+    <div class="modal-icon">
+     <svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24">
+      <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+     </svg>
+    </div>
+    <div class="modal-title" id="deleteModalTitle">
+     Delete Your Account?
+    </div>
+    <div class="modal-desc">
+     This action is
+     <strong>
+      permanent and irreversible.
+     </strong>
+     The following will be lost forever:
+    </div>
+    <div class="modal-checklist">
+     <div class="modal-check-item">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="16">
+       <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      All your orders and purchase history
+     </div>
+     <div class="modal-check-item">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="16">
+       <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      All accumulated points and rewards
+     </div>
+     <div class="modal-check-item">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="16">
+       <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      Your profile, avatar, and account data
+     </div>
+     <div class="modal-check-item">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="16">
+       <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      All notifications and activity logs
+     </div>
+    </div>
+    <div class="modal-actions">
+     <button class="modal-btn-cancel" onclick="closeDeleteModal()">
+      Cancel
+     </button>
+     <button class="modal-btn-next" onclick="goToModalStep2()">
+      Continue
+      <svg fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14">
+       <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </div>
+   </div>
+   <!-- Type to confirm -->
+   <div class="modal-box" id="modalStep2" style="display:none">
+    <div class="modal-steps">
+     <div class="modal-step-dot active">
+     </div>
+     <div class="modal-step-dot active">
+     </div>
+    </div>
+    <div class="modal-icon">
+     <svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24">
+      <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+     </svg>
+    </div>
+    <div class="modal-title">
+     Final Confirmation
+    </div>
+    <div class="modal-desc">
+     To confirm deletion, type your account email address below.
+    </div>
+    <div class="modal-confirm-field">
+     <label>
+      Confirm Email
+     </label>
+     <input autocomplete="off" id="deleteConfirmInput" oninput="checkDeleteConfirm()" placeholder="your@email.com" type="email"/>
+     <div class="hint">
+      Type exactly:
+      <code id="emailHint">
+       your@email.com
+      </code>
+     </div>
+    </div>
+    <div class="modal-actions">
+     <button class="modal-btn-cancel" onclick="goToModalStep1()">
+      <svg fill="none" height="14" stroke="currentColor" stroke-width="2.5" style="margin-right:4px" viewbox="0 0 24 24" width="14">
+       <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      Back
+     </button>
+     <button class="modal-btn-danger" disabled="" id="confirmDeleteBtn" onclick="executeDeleteAccount()">
+      <span class="btn-label">
+       Delete Forever
+      </span>
+      <div class="btn-spinner">
+      </div>
+     </button>
+    </div>
+   </div>
+  </div>
+  <script type="module">
+   import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+    getAuth,
+    onAuthStateChanged,
+    updatePassword,
+    deleteUser,
+    reauthenticateWithCredential,
+    EmailAuthProvider
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+    getDatabase,
+    ref,
+    onValue,
+    get,
+    update,
+    set
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyA4JpEiy3lJZCDhoi1g7zNXqKzbdI0SAsM",
+    authDomain: "messengerchatapp-7c754.firebaseapp.com",
+    databaseURL: "https://messengerchatapp-7c754-default-rtdb.firebaseio.com",
+    projectId: "messengerchatapp-7c754",
+    storageBucket: "messengerchatapp-7c754.firebasestorage.app",
+    messagingSenderId: "78446807414",
+    appId: "1:78446807414:web:e1879f4bd9f10115e81257",
+    measurementId: "G-VBWRC4SWL5"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+const theme = localStorage.getItem('theme') || 'dark';
+if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+
+let currentUser = null;
+let currentUserData = {};
+let profileEditEnabled = false;
+let securityEditEnabled = false;
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+    currentUser = user;
+
+    const snap = await get(ref(db, 'users/' + user.uid));
+    currentUserData = snap.val() || {};
+    const isAdmin = currentUserData.role === 'admin';
+
+    // Render
+    renderTopbar('Account', currentUserData, isAdmin);
+    renderSidebar('account', currentUserData, isAdmin);
+
+    // Fill data
+    const initial = (currentUserData.displayName || user.email || 'U')[0].toUpperCase();
+    document.getElementById('avatarLarge').innerHTML = initial + '<input type="file" accept="image/*" onchange="changeAvatar(event)">';
+    document.getElementById('displayName').textContent = currentUserData.displayName || 'User';
+    document.getElementById('userEmail').textContent = user.email;
+    document.getElementById('emailInput').value = user.email;
+    document.getElementById('uidInput').value = user.uid;
+    document.getElementById('nameInput').value = currentUserData.displayName || '';
+    document.getElementById('roleText').textContent = isAdmin ? 'Admin' : 'Buyer';
+
+    // Stats
+    loadStats(user.uid);
+
+    // Joine
+    if (currentUserData.createdAt) {
+        const d = new Date(currentUserData.createdAt);
+        document.getElementById('joinedDate').textContent = d.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+
+    onValue(ref(db, 'users/' + user.uid + '/points'), (s) => {
+        currentUserData.points = s.val() || 0;
+        document.getElementById('statPoints').textContent = currentUserData.points;
+    });
+});
+
+async function loadStats(uid) {
+
+    const ordersSnap = await get(ref(db, 'orders'));
+    const orders = ordersSnap.val() || {};
+    const userOrders = Object.values(orders).filter(o => o.userId === uid);
+    const completed = userOrders.filter(o => o.status === 'completed').length;
+    const purchased = userOrders.length;
+    let spent = 0;
+    userOrders.forEach(o => {
+        spent += o.pointsSpent || 0;
+    });
+
+    document.getElementById('statOrders').textContent = userOrders.length;
+    document.getElementById('statSpent').textContent = spent;
+    document.getElementById('statPurchased').textContent = purchased;
+
+
+    onValue(ref(db, 'orders'), (s) => {
+        const all = s.val() || {};
+        const my = Object.values(all).filter(o => o.userId === uid);
+        const done = my.filter(o => o.status === 'completed').length;
+        let totalSpent = 0;
+        my.forEach(o => {
+            totalSpent += o.pointsSpent || 0;
+        });
+        document.getElementById('statOrders').textContent = my.length;
+        document.getElementById('statSpent').textContent = totalSpent;
+        document.getElementById('statPurchased').textContent = done;
+    });
+}
+
+window.toggleEdit = () => {
+    profileEditEnabled = !profileEditEnabled;
+    const nameInput = document.getElementById('nameInput');
+    const saveBtn = document.getElementById('saveProfileBtn');
+    const toggleBtn = document.getElementById('editToggleBtn');
+    nameInput.disabled = !profileEditEnabled;
+    saveBtn.disabled = !profileEditEnabled;
+    toggleBtn.textContent = profileEditEnabled ? 'Disable Edit' : 'Enable Edit';
+    if (profileEditEnabled) nameInput.focus();
+};
+
+window.toggleSecurityEdit = () => {
+    securityEditEnabled = !securityEditEnabled;
+    const pw1 = document.getElementById('newPwInput');
+    const pw2 = document.getElementById('confirmPwInput');
+    const saveBtn = document.getElementById('saveSecurityBtn');
+    const toggleBtn = document.getElementById('securityEditBtn');
+    pw1.disabled = !securityEditEnabled;
+    pw2.disabled = !securityEditEnabled;
+    saveBtn.disabled = !securityEditEnabled;
+    toggleBtn.textContent = securityEditEnabled ? 'Disable Edit' : 'Enable Edit';
+    if (securityEditEnabled) pw1.focus();
+};
+
+window.saveProfile = async () => {
+    const newName = document.getElementById('nameInput').value.trim();
+    const alertEl = document.getElementById('profileAlert');
+    if (!newName) {
+        showAlert(alertEl, 'Display name cannot be empty.', 'error');
+        return;
+    }
+    try {
+        await update(ref(db, 'users/' + currentUser.uid), {
+            displayName: newName
+        });
+        document.getElementById('displayName').textContent = newName;
+        currentUserData.displayName = newName;
+        const initial = newName[0].toUpperCase();
+        document.getElementById('avatarLarge').childNodes[0].textContent = initial;
+        showAlert(alertEl, 'Profile updated successfully!', 'success');
+        profileEditEnabled = false;
+        document.getElementById('nameInput').disabled = true;
+        document.getElementById('saveProfileBtn').disabled = true;
+        document.getElementById('editToggleBtn').textContent = 'Enable Edit';
+    } catch (e) {
+        showAlert(alertEl, 'Failed to update: ' + e.message, 'error');
+    }
+};
+
+window.saveSecurity = async () => {
+    const newPw = document.getElementById('newPwInput').value;
+    const confirmPw = document.getElementById('confirmPwInput').value;
+    const alertEl = document.getElementById('securityAlert');
+    if (newPw && newPw.length < 8) {
+        showAlert(alertEl, 'Password must be at least 8 characters.', 'error');
+        return;
+    }
+    if (newPw && newPw !== confirmPw) {
+        showAlert(alertEl, 'Passwords do not match.', 'error');
+        return;
+    }
+    if (!newPw) {
+        showAlert(alertEl, 'Please enter a new password.', 'error');
+        return;
+    }
+    try {
+        await updatePassword(currentUser, newPw);
+        showAlert(alertEl, 'Password updated successfully!', 'success');
+        document.getElementById('newPwInput').value = '';
+        document.getElementById('confirmPwInput').value = '';
+        securityEditEnabled = false;
+        document.getElementById('newPwInput').disabled = true;
+        document.getElementById('confirmPwInput').disabled = true;
+        document.getElementById('saveSecurityBtn').disabled = true;
+        document.getElementById('securityEditBtn').textContent = 'Enable Edit';
+    } catch (e) {
+        if (e.code === 'auth/requires-recent-login') {
+            showAlert(alertEl, 'Please re-login and try again.', 'error');
+        } else {
+            showAlert(alertEl, 'Failed: ' + e.message, 'error');
+        }
+    }
+};
+
+window.changeAvatar = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+        try {
+            await update(ref(db, 'users/' + currentUser.uid), {
+                photoBase64: ev.target.result
+            });
+            document.getElementById('avatarLarge').childNodes[0].textContent = '';
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%';
+            document.getElementById('avatarLarge').prepend(img);
+            showToast('Avatar Updated', 'Your profile photo has been changed.', 'success');
+        } catch (err) {
+            showToast('Error', err.message, 'error');
+        }
+    };
+    reader.readAsDataURL(file);
+};
+
+window.deleteAccount = () => {
+
+    const emailHint = document.getElementById('emailHint');
+    if (currentUser) emailHint.textContent = currentUser.email;
+    document.getElementById('deleteConfirmInput').value = '';
+    document.getElementById('confirmDeleteBtn').disabled = true;
+    document.getElementById('modalStep1').style.display = '';
+    document.getElementById('modalStep2').style.display = 'none';
+    document.getElementById('deleteModal').classList.add('show');
+};
+
+window.closeDeleteModal = () => {
+    document.getElementById('deleteModal').classList.remove('show');
+};
+
+window.goToModalStep2 = () => {
+    document.getElementById('modalStep1').style.display = 'none';
+    document.getElementById('modalStep2').style.display = '';
+    setTimeout(() => document.getElementById('deleteConfirmInput').focus(), 50);
+};
+
+window.goToModalStep1 = () => {
+    document.getElementById('modalStep1').style.display = '';
+    document.getElementById('modalStep2').style.display = 'none';
+};
+
+window.checkDeleteConfirm = () => {
+    const input = document.getElementById('deleteConfirmInput').value.trim();
+    const email = currentUser ? currentUser.email : '';
+    document.getElementById('confirmDeleteBtn').disabled = (input !== email);
+};
+
+window.executeDeleteAccount = async () => {
+    const btn = document.getElementById('confirmDeleteBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+    try {
+        await set(ref(db, 'users/' + currentUser.uid), null);
+        await set(ref(db, 'notifications/' + currentUser.uid), null);
+        await deleteUser(currentUser);
+        closeDeleteModal();
+        showToast('Account Deleted', 'Your account has been permanently removed.', 'success');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+    } catch (e) {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        closeDeleteModal();
+        if (e.code === 'auth/requires-recent-login') {
+            showToast('Re-login Required', 'Please sign out and sign back in, then try again.', 'error');
+        } else {
+            showToast('Error', e.message, 'error');
+        }
+    }
+};
+
+document.getElementById('deleteModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
+});
+
+
+window.updatePwStrength = () => {
+    const pw = document.getElementById('newPwInput').value;
+    const fill = document.getElementById('pwStrengthFill');
+    const label = document.getElementById('pwStrengthLabel');
+    if (!pw) {
+        fill.style.width = '0%';
+        label.textContent = '';
+        return;
+    }
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (pw.length >= 12) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const levels = [{
+        w: '20%',
+        c: '#f43f5e',
+        t: 'Very Weak'
+    }, {
+        w: '40%',
+        c: '#fb923c',
+        t: 'Weak'
+    }, {
+        w: '60%',
+        c: '#facc15',
+        t: 'Fair'
+    }, {
+        w: '80%',
+        c: '#4ade80',
+        t: 'Strong'
+    }, {
+        w: '100%',
+        c: '#22d3a5',
+        t: 'Very Strong'
+    }, ];
+    const lvl = levels[Math.min(score - 1, 4)] || levels[0];
+    fill.style.width = lvl.w;
+    fill.style.background = lvl.c;
+    label.textContent = lvl.t;
+    label.style.color = lvl.c;
+};
+
+function showAlert(el, msg, type) {
+    el.textContent = msg;
+    el.className = `alert-box ${type} show`;
+    setTimeout(() => {
+        el.classList.remove('show');
+    }, 5000);
+}
+
+function renderTopbar(title, userData, isAdmin) {
+    const initial = (userData.displayName || userData.email || 'U')[0].toUpperCase();
+    const notifHTML = `
+      <button class="notif-btn" onclick="toggleNotif()" aria-label="Notifications">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      </button>
+    `;
+    document.body.insertAdjacentHTML('afterbegin', `
+      <div class="topbar">
+        <button class="hamburger" onclick="toggleSidebar()"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        <span class="logo-inline">${title}</span>
+        <div class="topbar-right">
+          ${notifHTML}
+          <div class="avatar-btn" onclick="window.location.href='account.html'">${initial}</div>
+        </div>
+      </div>
+      <div class="toast-container" id="toastContainer"></div>
+    `);
+}
+
+function renderSidebar(currentPage, userData, isAdmin) {
+    const adminItems = isAdmin ? `
+      <div class="nav-section">Admin</div>
+      <a href="admin-dashboard.html" class="nav-item ${currentPage==='admin-dashboard'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Admin Dashboard <span class="admin-badge">Admin</span></a>
+      <a href="upload.html" class="nav-item ${currentPage==='upload'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg> Upload Game</a>
+    ` : '';
+    document.body.insertAdjacentHTML('afterbegin', `
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header"><div class="sidebar-logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="sidebar-logo-text">XENON STORE</span></div>
+        <div class="sidebar-user"><div class="sidebar-user-name">${userData.displayName||'User'}</div><div class="sidebar-user-email">${userData.email||''}</div><div class="sidebar-points"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>${userData.points||0} pts</div></div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">Main</div>
+          <a href="home.html" class="nav-item ${currentPage==='home'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Home</a>
+          <a href="shop.html" class="nav-item ${currentPage==='shop'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg> Products</a>
+          <div class="nav-section">Account</div>
+          <a href="account.html" class="nav-item ${currentPage==='account'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Account</a>
+                  <a href="point.html" class="nav-item ${currentPage==='point'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Your Points</a>
+          <a href="buy-point.html" class="nav-item ${currentPage==='buy-point'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg> Buy Points</a>
+          <a href="done-buy.html" class="nav-item ${currentPage==='done-buy'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Done Buy</a>
+          <div class="nav-section">Preferences</div>
+          <a href="setting.html" class="nav-item ${currentPage==='setting'?'active':''}"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg> Settings</a>
+<a href="changelog.html" class="nav-item">
+  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M9 8h6M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+  </svg>
+  Changelog
+</a>          
+          <div class="theme-toggle" onclick="toggleTheme()"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg> Theme <div class="toggle-switch"></div></div>
+          ${adminItems}
+        </nav>
+        <div class="sidebar-footer"><button class="logout-btn" onclick="doLogout()"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Sign Out</button></div>
+      </div>
+      <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    `);
+}
+
+window.toggleSidebar = () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+};
+window.closeSidebar = () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+};
+window.toggleTheme = () => {
+    const c = document.documentElement.getAttribute('data-theme');
+    const n = c === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', n);
+    localStorage.setItem('theme', n);
+};
+window.toggleNotif = () => {
+    document.getElementById('notifPanel').classList.toggle('open');
+};
+window.doLogout = async () => {
+    await signOut(auth);
+    window.location.href = 'login.html';
+};
+
+function showToast(title, msg, type) {
+    const id = 'toast_' + Date.now();
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.id = id;
+    el.innerHTML = `<div><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div><button class="toast-close" onclick="document.getElementById('${id}').remove()">×</button>`;
+    document.getElementById('toastContainer').appendChild(el);
+    setTimeout(() => {
+        const t = document.getElementById(id);
+        if (t) t.remove();
+    }, 5000);
+}
+window.showToast = showToast;
+  </script>
+ </body>
+</html>

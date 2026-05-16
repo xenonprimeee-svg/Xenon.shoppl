@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   XENON STORE — Purchase Submitted
+  </title>
+  <link href="assets/css/css2" rel="stylesheet"/>
+  <style>
+   :root {
+      --bg: #0f0f13;
+      --surface: #18181f;
+      --surface2: #1e1e27;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f0f0f5;
+      --muted: #7a7a90;
+      --accent: #7c5cfc;
+      --accent2: #a78bfa;
+      --success: #22d3a5;
+      --warn: #fbbf24;
+    }
+    
+    [data-theme="light"] {
+      --bg: #f0f0f6;
+      --surface: #ffffff;
+      --surface2: #f0f0f5;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #1a1a2e;
+      --muted: #888899;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px 80px;
+    }
+    
+    .page-wrap {
+      width: 100%;
+      max-width: 480px;
+    }
+    
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-home {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .nav-home:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    
+    .hero {
+      text-align: center;
+      padding: 32px 20px 24px;
+      animation: fadeIn 0.5s ease both;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px)
+      }
+      
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+    
+    .success-ring {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 0 12px rgba(124, 92, 252, 0.12), 0 0 0 24px rgba(124, 92, 252, 0.05);
+      animation: pulse 2.5s ease infinite;
+    }
+    
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 12px rgba(124, 92, 252, 0.12), 0 0 0 24px rgba(124, 92, 252, 0.05)
+      }
+      
+      50% {
+        box-shadow: 0 0 0 16px rgba(124, 92, 252, 0.08), 0 0 0 32px rgba(124, 92, 252, 0.03)
+      }
+    }
+    
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    
+    .hero-sub {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    /* Status banner */
+    .status-banner {
+      background: rgba(251, 191, 36, 0.07);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: 16px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.5s 0.1s ease both;
+    }
+    
+    .status-icon-wrap {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      background: rgba(251, 191, 36, 0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .status-text strong {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      color: var(--warn);
+      display: block;
+      margin-bottom: 2px;
+    }
+    
+    .status-text span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    
+    /* Receipt card */
+    .receipt-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      animation: fadeIn 0.5s 0.15s ease both;
+    }
+    
+    .receipt-hdr {
+      background: linear-gradient(135deg, #007DFF 0%, #0057b8 100%);
+      padding: 22px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .receipt-hdr::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.07);
+    }
+    
+    .receipt-hdr-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .gcash-pill {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 4px 14px;
+      font-weight: 900;
+      font-size: 14px;
+      color: #fff;
+    }
+    
+    .receipt-hdr-amount {
+      text-align: right;
+    }
+    
+    .hdr-lbl {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+    
+    .hdr-amount {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+    
+    .hdr-pts {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+    
+    /* Zigzag */
+    .tear {
+      height: 16px;
+      background: var(--surface);
+      position: relative;
+      margin-top: -1px;
+    }
+    
+    .tear::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 16px;
+      background: linear-gradient(135deg, #007DFF 0%, #0057b8 100%);
+      clip-path: polygon(0% 0%, 2.5% 100%, 5% 0%, 7.5% 100%, 10% 0%, 12.5% 100%,
+          15% 0%, 17.5% 100%, 20% 0%, 22.5% 100%, 25% 0%, 27.5% 100%,
+          30% 0%, 32.5% 100%, 35% 0%, 37.5% 100%, 40% 0%, 42.5% 100%,
+          45% 0%, 47.5% 100%, 50% 0%, 52.5% 100%, 55% 0%, 57.5% 100%,
+          60% 0%, 62.5% 100%, 65% 0%, 67.5% 100%, 70% 0%, 72.5% 100%,
+          75% 0%, 77.5% 100%, 80% 0%, 82.5% 100%, 85% 0%, 87.5% 100%,
+          90% 0%, 92.5% 100%, 95% 0%, 97.5% 100%, 100% 0%);
+    }
+    
+    .dashed {
+      border: none;
+      border-top: 2px dashed var(--border);
+      margin: 0 24px;
+    }
+    
+    .r-body {
+      padding: 18px 24px;
+    }
+    
+    .r-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .r-row:last-child {
+      border-bottom: none;
+    }
+    
+    .r-lbl {
+      color: var(--muted);
+    }
+    
+    .r-val {
+      font-weight: 600;
+    }
+    
+    .badge-pending {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: var(--warn);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: blink 1.2s ease infinite;
+    }
+    
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+      
+      50% {
+        opacity: 0.3
+      }
+    }
+    
+    .ref-strip {
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 6px 0 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    
+    .ref-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--accent2);
+    }
+    
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .copy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    /* Proof */
+    .proof-section {
+      padding: 14px 24px 18px;
+    }
+    
+    .micro {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    #proofThumb {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: none;
+    }
+    
+    /* Action row */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      padding: 0 24px 24px;
+    }
+    
+    .btn-dl {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    
+    .btn-dl:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .btn-home {
+      flex: 1.7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    
+    .btn-home:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(124, 92, 252, 0.35);
+    }
+    
+    /* Steps timeline */
+    .steps-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px 20px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.5s 0.2s ease both;
+    }
+    
+    .steps-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    
+    .step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    
+    .step:last-child {
+      margin-bottom: 0;
+    }
+    
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    
+    .step-dot.done {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
+    
+    .step-dot.active {
+      background: rgba(251, 191, 36, 0.15);
+      border: 2px solid var(--warn);
+      color: var(--warn);
+    }
+    
+    .step-dot.wait {
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      color: var(--muted);
+    }
+    
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: var(--border);
+      margin: 4px 0;
+      min-height: 16px;
+    }
+    
+    .step-line.done {
+      background: linear-gradient(to bottom, var(--accent), rgba(124, 92, 252, 0.2));
+    }
+    
+    .step-info {
+      padding-top: 4px;
+    }
+    
+    .step-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .step-desc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+ </head>
+ <body>
+  <div class="page-wrap">
+   <div class="top-nav">
+    <span class="nav-logo">
+     XENON STORE
+    </span>
+    <a class="nav-home" href="./home.html">
+     <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+      <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+     </svg>
+     Home
+    </a>
+   </div>
+   <div class="hero">
+    <div class="success-ring">
+     <svg fill="none" height="36" stroke="white" stroke-width="2.5" viewbox="0 0 24 24" width="36">
+      <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+     </svg>
+    </div>
+    <div class="hero-title">
+     Request Submitted!
+    </div>
+    <div class="hero-sub">
+     Your payment proof has been received.
+     <br/>
+     Please wait for admin approval.
+    </div>
+   </div>
+   <!-- Status banner -->
+   <div class="status-banner">
+    <div class="status-icon-wrap">
+     <svg fill="none" height="20" stroke="#fbbf24" stroke-width="2" viewbox="0 0 24 24" width="20">
+      <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+     </svg>
+    </div>
+    <div class="status-text">
+     <strong>
+      ⏳ Pending Review
+     </strong>
+     <span>
+      Admin will verify your GCash payment and credit your points shortly.
+     </span>
+    </div>
+   </div>
+   <!-- Receipt -->
+   <div class="receipt-card" id="receiptCard">
+    <div class="receipt-hdr">
+     <div class="receipt-hdr-inner">
+      <div class="gcash-pill">
+       GCash
+      </div>
+      <div class="receipt-hdr-amount">
+       <div class="hdr-lbl">
+        Total Paid
+       </div>
+       <div class="hdr-amount" id="succAmount">
+        ₱—
+       </div>
+       <div class="hdr-pts" id="succPts">
+        — points
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="tear">
+    </div>
+    <div class="r-body">
+     <div class="r-row">
+      <span class="r-lbl">
+       Status
+      </span>
+      <span class="r-val">
+       <span class="badge-pending">
+        <span class="badge-dot">
+        </span>
+        Pending
+       </span>
+      </span>
+     </div>
+     <div class="r-row" style="flex-direction:column;align-items:flex-start;gap:2px">
+      <span class="r-lbl">
+       Reference No.
+      </span>
+      <div class="ref-strip">
+       <span class="ref-num" id="succRef">
+        —
+       </span>
+       <button class="copy-btn" onclick="copyRef()">
+        Copy
+       </button>
+      </div>
+     </div>
+     <div class="r-row">
+      <span class="r-lbl">
+       Account
+      </span>
+      <span class="r-val" id="succEmail">
+       —
+      </span>
+     </div>
+     <div class="r-row">
+      <span class="r-lbl">
+       Payment
+      </span>
+      <span class="r-val">
+       GCash QR
+      </span>
+     </div>
+     <div class="r-row">
+      <span class="r-lbl">
+       Rate
+      </span>
+      <span class="r-val">
+       ₱1 = 1 Point
+      </span>
+     </div>
+     <div class="r-row" style="border-bottom:none">
+      <span class="r-lbl">
+       Date &amp; Time
+      </span>
+      <span class="r-val" id="succDate">
+       —
+      </span>
+     </div>
+    </div>
+    <hr class="dashed"/>
+    <div class="proof-section">
+     <div class="micro">
+      Proof of Payment
+     </div>
+     <img alt="Proof" id="proofThumb" src=""/>
+     <div id="noProof" style="font-size:13px;color:var(--muted)">
+      No proof uploaded
+     </div>
+    </div>
+    <div class="action-row">
+     <button class="btn-dl" onclick="downloadReceipt()">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+       <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      Download
+     </button>
+     <a class="btn-home" href="./home.html">
+      <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+       <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      Go to Home
+     </a>
+    </div>
+   </div>
+   <!-- timeline -->
+   <div class="steps-card">
+    <div class="steps-title">
+     What happens next?
+    </div>
+    <div class="step">
+     <div class="step-left">
+      <div class="step-dot done">
+       <svg fill="none" height="14" stroke="white" stroke-width="3" viewbox="0 0 24 24" width="14">
+        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </div>
+      <div class="step-line done">
+      </div>
+     </div>
+     <div class="step-info">
+      <div class="step-name">
+       Payment Submitted
+      </div>
+      <div class="step-desc">
+       Your GCash payment proof was uploaded successfully.
+      </div>
+     </div>
+    </div>
+    <div class="step">
+     <div class="step-left">
+      <div class="step-dot active">
+       2
+      </div>
+      <div class="step-line">
+      </div>
+     </div>
+     <div class="step-info">
+      <div class="step-name" style="color:var(--warn)">
+       Admin Review
+      </div>
+      <div class="step-desc">
+       Admin is verifying your proof of payment. Usually takes a few minutes.
+      </div>
+     </div>
+    </div>
+    <div class="step">
+     <div class="step-left">
+      <div class="step-dot wait">
+       3
+      </div>
+     </div>
+     <div class="step-info">
+      <div class="step-name" style="color:var(--muted)">
+       Points Credited
+      </div>
+      <div class="step-desc">
+       Points will appear in your balance once approved.
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+   const theme = localStorage.getItem('theme') || 'dark';
+if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+
+function pad(n) {
+    return String(n).padStart(2, '0');
+}
+
+function genRef() {
+    return 'ENZ-' + Date.now().toString(36).toUpperCase().slice(-5) + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
+const stored = (() => {
+    try {
+        return JSON.parse(sessionStorage.getItem('XenonOrder') || localStorage.getItem('XenonOrder') || 'null');
+    } catch (e) {
+        return null;
+    }
+})();
+
+const order = stored || {
+    amount: 200,
+    points: 200,
+    email: 'demo@example.com',
+    createdAt: Date.now()
+};
+if (!order.ref) order.ref = genRef();
+
+document.getElementById('succAmount').textContent = '₱' + Number(order.amount).toLocaleString();
+document.getElementById('succPts').textContent = Number(order.points).toLocaleString() + ' points';
+document.getElementById('succEmail').textContent = order.email || '—';
+document.getElementById('succRef').textContent = order.ref;
+
+const d = new Date(order.createdAt || Date.now());
+const dateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+document.getElementById('succDate').textContent = dateStr;
+
+if (order.proofBase64) {
+    const img = document.getElementById('proofThumb');
+    img.src = order.proofBase64;
+    img.style.display = 'block';
+    document.getElementById('noProof').style.display = 'none';
+}
+
+function copyRef() {
+    navigator.clipboard.writeText(order.ref).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        btn.style.color = 'var(--success)';
+        btn.style.borderColor = 'var(--success)';
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+        }, 2000);
+    });
+}
+
+function downloadReceipt() {
+    const proofHtml = order.proofBase64 ?
+        `<img src="${order.proofBase64}" style="max-width:300px;border-radius:12px;margin-top:8px;">` :
+        '<p style="color:#7a7a90;font-size:13px">No proof image</p>';
+
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>XENON Receipt ${order.ref}</title>
+<style>
+  body{font-family:'Segoe UI',sans-serif;background:#0f0f13;color:#f0f0f5;display:flex;justify-content:center;padding:40px 16px;margin:0}
+  .card{background:#18181f;border-radius:24px;max-width:420px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+  .hdr{background:linear-gradient(135deg,#007DFF,#0057b8);padding:22px 24px}
+  .hdr-inner{display:flex;justify-content:space-between;align-items:center}
+  .pill{background:rgba(255,255,255,.2);border-radius:8px;padding:4px 14px;font-weight:900;color:#fff;font-size:14px}
+  .amt{font-size:32px;font-weight:800;color:#fff;line-height:1;text-align:right}
+  .pts{color:rgba(255,255,255,.75);font-size:13px;text-align:right;margin-top:3px}
+  .body{padding:18px 24px}
+  .row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14px}
+  .row:last-child{border-bottom:none}
+  .row span:first-child{color:#7a7a90}
+  .row span:last-child{font-weight:600}
+  .badge{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:#fbbf24;border-radius:20px;padding:4px 12px;font-size:12px}
+  .ref{background:#1e1e27;border-radius:12px;padding:12px 16px;font-size:16px;font-weight:700;color:#a78bfa;text-align:center;letter-spacing:1.5px;margin:8px 0 2px}
+  .proof{padding:14px 24px 24px;text-align:center}
+  .micro{font-size:11px;color:#7a7a90;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+  .tear{border:none;border-top:2px dashed rgba(255,255,255,.08);margin:0 24px}
+  .steps{padding:18px 24px 20px}
+  .step{display:flex;gap:12px;margin-bottom:14px}
+  .dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+  .dot.done{background:linear-gradient(135deg,#7c5cfc,#a78bfa);color:#fff}
+  .dot.active{background:rgba(251,191,36,.15);border:2px solid #fbbf24;color:#fbbf24}
+  .dot.wait{background:#1e1e27;border:2px solid rgba(255,255,255,.1);color:#7a7a90}
+  .sname{font-size:14px;font-weight:600;margin-bottom:2px}
+  .sdesc{font-size:12px;color:#7a7a90}
+  @media print{body{background:#fff;color:#111}.card{box-shadow:none}.hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body>
+<div class="card">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div class="pill">GCash</div>
+      <div><div class="amt">₱${Number(order.amount).toLocaleString()}</div><div class="pts">${Number(order.points).toLocaleString()} points</div></div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="row"><span>Status</span><span><span class="badge">⏳ Pending Review</span></span></div>
+    <div style="padding:8px 0;font-size:12px;color:#7a7a90;text-transform:uppercase;letter-spacing:.07em">Reference No.</div>
+    <div class="ref">${order.ref}</div>
+    <div class="row"><span>Account</span><span>${order.email||'—'}</span></div>
+    <div class="row"><span>Payment Method</span><span>GCash QR</span></div>
+    <div class="row"><span>Rate</span><span>₱1 = 1 Point</span></div>
+    <div class="row"><span>Date</span><span>${dateStr}</span></div>
+  </div>
+  <hr class="tear">
+  <div class="proof"><div class="micro">Proof of Payment</div>${proofHtml}</div>
+  <hr class="tear">
+  <div class="steps">
+    <div style="font-size:13px;font-weight:700;margin-bottom:14px">What happens next?</div>
+    <div class="step"><div class="dot done">✓</div><div><div class="sname">Payment Submitted</div><div class="sdesc">Proof uploaded successfully.</div></div></div>
+    <div class="step"><div class="dot active">2</div><div><div class="sname" style="color:#fbbf24">Admin Review</div><div class="sdesc">Verifying your GCash payment.</div></div></div>
+    <div class="step"><div class="dot wait">3</div><div><div class="sname" style="color:#7a7a90">Points Credited</div><div class="sdesc">Will appear in your balance when approved.</div></div></div>
+  </div>
+</div>
+</body></html>`;
+
+    const blob = new Blob([html], {
+        type: 'text/html'
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `XENON-Receipt-${order.ref}.html`;
+    a.click();
+}
+  </script>
+ </body>
+</html>
